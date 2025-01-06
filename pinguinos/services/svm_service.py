@@ -10,7 +10,13 @@ model = joblib.load("pinguinos/models/svm_model.pkl")
 def predict():
     data = request.get_json()
     df = pd.DataFrame(data)
+    print("Datos recibidos en el servidor:")
+    print(df.head())
     predictions = model.predict(df)
+    result = jsonify({'predictions': predictions.tolist()})
+    print("Result:")
+    print(predictions.tolist())
+    print(result)
     return jsonify({'predictions': predictions.tolist()})
 
 if __name__ == "__main__":

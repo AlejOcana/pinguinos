@@ -4,13 +4,11 @@ from sklearn.svm import SVC
 from data_preprocessing import preprocess_data
 
 X_train, X_test, y_train, y_test, preprocessor = preprocess_data()
+model_item = {"SVM": SVC()}
 
-model = Pipeline(steps=[
-    ('preprocessor', preprocessor),
-    ('classifier', SVC())
-])
+for name, model in model_item.items():
+    pipeline = Pipeline(steps=[('preprocessor', preprocessor), ('model', model)])
+    pipeline.fit(X_train, y_train)
 
-model.fit(X_train, y_train)
-
-joblib.dump(model, "pinguinos/models/svm_model.pkl")
-print("Modelo SVM entrenado y guardado.")
+    joblib.dump(pipeline, f'pinguinos/models/{name.lower().replace(" ", "_")}_model.pkl')
+    print(f'Modelo {name} entrenado y guardado.')
